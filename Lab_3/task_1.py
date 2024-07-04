@@ -14,7 +14,8 @@ matrix = np.array([[2, 8, 7, 9, 1],
 
 
 def is_orthonormal(vectors):
-    return np.allclose(np.dot(vectors.T, vectors), np.eye(vectors.shape[1]))
+    #якщо вектори ортонормальні, то їх добуток = одинична матриця
+    return np.allclose(np.dot(vectors.T, vectors), np.eye(vectors.shape[1])) #eye створює одиничну матрицю
 
 
 def normalize_vectors(vectors):
@@ -27,26 +28,22 @@ def svd(matrix):
     Sr = np.dot(matrix, matrix.T)
 
     eigenvalues, eigenvectors = np.linalg.eig(Sr)
-
+    sorted = np.argsort(eigenvalues)[::-1] # [:: -1] -- зміна порядку індексів, щоб було спадання
+    eigenvalues = eigenvalues[sorted]
     U = eigenvectors
 
     if not is_orthonormal(U):
-        print("Eigenvectors are not orthonormal. Normalizing...")
+        #print("Eigenvectors are not orthonormal. Normalizing...")
         U = normalize_vectors(U)
-
-    sorted = np.argsort(eigenvalues)[::-1]
-    eigenvalues = np.abs(eigenvalues[sorted])
-
-    #U = eigenvectors[:, sorted]
 
     singular_values = np.sqrt(eigenvalues)
 
     E = np.zeros((matrix.shape[0], matrix.shape[1]))
-    np.fill_diagonal(E, singular_values)
+    np.fill_diagonal(E, singular_values) #np.fill_diagonal(array, values)
 
     V = np.zeros((matrix.shape[1], matrix.shape[1]))
     for i in range(len(singular_values)):
-        V[:, i] = np.dot(matrix.T, U[:, i]) / singular_values[i]
+        V[:, i] = np.dot(matrix.T, U[:, i]) / singular_values[i] #ця формула дає одразу нормовані вектори
 
     return U, E, V.T
 
@@ -76,9 +73,9 @@ print("\n-------------V transpose (NumPy)---------------")
 print(Vt_np)
 
 print()
-reconstructed_matrix = np.dot(U, np.dot(E, Vt))
-print("Reconstructed matrix:")
-print(reconstructed_matrix)
+started_matrix = np.dot(U, np.dot(E, Vt))
+print("Started matrix:")
+print(started_matrix)
 
 print("\nOriginal matrix:")
 print(matrix)
