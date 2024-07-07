@@ -28,7 +28,6 @@ R_demeaned = R - user_ratings_mean.reshape(-1, 1)
 U, sigma, Vt = svds(R_demeaned, k=3)  # k відповідає за розмірність даних, яку зберігаємо -- ознака
 # U розмірністю n_users * 3
 
-# create a diagonal matrix from sigma
 sigma_diagonal = np.diag(sigma)
 
 # матриця з прогнозованими оцінками
@@ -47,13 +46,12 @@ def get_top_recommendations(user_id, num_recommendations=10):
         print(f"User ID {user_id} not found in the ratings matrix.")
         return None
 
-    # Отримання прогнозованих оцінок для користувача
     user_predictions = predicted_only_ratings_matrix.loc[user_id]
 
-    # Сортування прогнозованих оцінок за спаданням
+    # прогноз оцінок
     sorted_user_predictions = user_predictions.sort_values(ascending=False)
 
-    # Отримання топ-рекомендованих фільмів
+    # рекомендовані 10 фільмів
     top_indices = sorted_user_predictions.index[:num_recommendations]
 
     movie_titles = movies.loc[top_indices, 'title'].tolist()

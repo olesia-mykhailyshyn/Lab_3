@@ -26,7 +26,7 @@ ratings_matrix = ratings_matrix.dropna(thresh=100, axis=1)
 
 # заміна NaN на середнє значення у кожному стовпці
 filled_ratings_matrix_mean = ratings_matrix.apply(lambda col: col.fillna(col.mean()), axis=0)
-#filled_ratings_matrix_mean = ratings_matrix.fillna(5, axis=0)
+#filled_ratings_matrix_mean = ratings_matrix.fillna(2.5, axis=0)
 
 # перетворення DataFrame в NumPy array
 R = filled_ratings_matrix_mean.values
